@@ -1,0 +1,85 @@
+name: 构建SM8550内核
+
+on:
+
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+
+jobs:
+  
+  build:
+    
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Configure Git
+      run: |
+         git config --global user.name "Yxiguan"
+         git config --global user.email "2501608779@qq.com"
+    
+    - name: 安装编译环境
+      run: |
+        sudo apt install bc bison build-essential ccache curl flex g++-multilib gcc-multilib git git-lfs gnupg gperf imagemagick lib32readline-dev lib32z1-dev libelf-dev liblz4-tool lz4 libsdl1.2-dev libssl-dev libxml2 libxml2-utils lzop pngcrush rsync schedtool squashfs-tools xsltproc zip zlib1g-dev repo python-is-python3 -y
+
+    - name: 拉取oneplus 12r内核清单
+      run: |
+        mkdir kernel && cd kernel
+        repo init -u https://github.com/OnePlusOSS/kernel_manifest.git -b oneplus/sm8550 -m oneplus_12r_v.xml --depth=1
+        repo sync -j$(nproc --all)
+
+    - name: 添加KernelSU Next
+      run: |
+        cd kernel/kernel_platform
+        curl -LSs "https://raw.githubusercontent.com/rifsxd/KernelSU-Next/next/kernel/setup.sh" | bash -s next
+        cd KernelSU-Next
+        KSU_VERSION=$(expr $(/usr/bin/git rev-list --count HEAD) "+" 10200)
+        echo "KSUVER=$KSU_VERSION" >> $GITHUB_ENV
+        sed -i "s/DKSU_VERSION=16/DKSU_VERSION=${KSU_VERSION}/" kernel/Makefile
+        
+    - name: 添加SUSFS
+      run: |
+           cd kernel
+           git clone https://gitlab.com/simonpunk/susfs4ksu.git -b gki-android13-5.15
+           git clone https://github.com/TheWildJames/kernel_patches.git
+           cd kernel_platform
+           cp ../susfs4ksu/kernel_patches/KernelSU/10_enable_susfs_for_ksu.patch ./KernelSU-Next/
+           cp ../susfs4ksu/kernel_patches/50_add_susfs_in_gki-android13-5.15.patch ./common/
+           cp ../susfs4ksu/kernel_patches/fs/* ./common/fs/
+           cp ../susfs4ksu/kernel_patches/include/linux/* ./common/include/linux/
+
+           # Apply patches
+           cd ./KernelSU-Next
+           patch -p1 --forward < 10_enable_susfs_for_ksu.patch || true
+           cd ../common
+           patch -p1 < 50_add_susfs_in_gki-android13-5.15.patch || true
+           cp ../../kernel_patches/69_hide_stuff.patch ./
+           patch -p1 -F 3 < 69_hide_stuff.patch
+           git add -A && git commit -a -m "BUILD Kernel"
+           cd ..
+           cd ./msm-kernel && git add -A && git commit -a -m "BUILD Kernel"
+           cd ..
+             
+           cp ../kernel_patches/apk_sign.c_fix.patch ./
+           patch -p1 -F 3 < apk_sign.c_fix.patch
+             
+           cp ../kernel_patches/core_hook.c_fix.patch ./
+           patch -p1 --fuzz=3 < ./core_hook.c_fix.patch
+           
+           cp ../kernel_patches/selinux.c_fix.patch ./
+           patch -p1 -F 3 < selinux.c_fix.patch
+           
+    - name: 编译内核
+      run: |
+        cd kernel
+        ./kernel_platform/oplus/build/oplus_build_kernel.sh kalama gki
+
+    - name: Upload Image
+      uses: actions/upload-artifact@v4
+      with:
+        name: Image-KernelSU_Next-SUSFS
+        path: kernel/out/dist/Image
