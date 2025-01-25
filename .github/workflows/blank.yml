@@ -1,11 +1,6 @@
 name: 构建SM8550内核
 
 on:
-
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
   workflow_dispatch:
 
 
@@ -34,17 +29,16 @@ jobs:
     
     - name: 安装编译环境
       run: |
-        sudo apt install bc bison build-essential ccache curl flex g++-multilib gcc-multilib git git-lfs gnupg gperf imagemagick lib32readline-dev lib32z1-dev libelf-dev liblz4-tool lz4 libsdl1.2-dev libssl-dev libxml2 libxml2-utils lzop pngcrush rsync schedtool squashfs-tools xsltproc zip zlib1g-dev repo python-is-python3 -y
+        sudo apt update && sudo apt upgrade -y
+        sudo apt install ccache curl git repo python3 python-is-python3 -y
 
     - name: 拉取oneplus 12r内核清单
       run: |
         mkdir kernel && cd kernel
         repo init -u https://github.com/OnePlusOSS/kernel_manifest.git -b oneplus/sm8550 -m oneplus_12r_v.xml --depth=1
         repo sync -j$(nproc --all)
-        rm kernel_platform/common/android/abi_gki_protected_exports_* || echo "No protected exports!"
-        rm kernel_platform/msm-kernel/android/abi_gki_protected_exports_* || echo "No protected exports!"
-        sed -i '203a\export LTO=thin' kernel_platform/oplus/build/oplus_setup.sh
-        sed -i 's/export REPACK_IMG=true/export REPACK_IMG=false/Ig' kernel_platform/oplus/build/oplus_setup.sh
+        # sed -i '203a\export LTO=thin' kernel_platform/oplus/build/oplus_setup.sh
+        # sed -i 's/export REPACK_IMG=true/export REPACK_IMG=false/Ig' kernel_platform/oplus/build/oplus_setup.sh
         
         # sed -i 's/local default_value=none/local default_value=thin/Ig' kernel_platform/oplus/build/oplus_setup.sh
         # sed -i 's/local default_value=enable/local default_value=disable/Ig' kernel_platform/oplus/build/oplus_setup.sh
