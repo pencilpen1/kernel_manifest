@@ -93,7 +93,7 @@ jobs:
         name: AnyKernel3_KernelSU_Next-For-SM8550
         path: ./AnyKernel3/*
 
-    - name: Upload Image
+    - name: 上传 Image
       uses: actions/upload-artifact@v4
       with:
         name: Image-KernelSU_Next-SUSFS
