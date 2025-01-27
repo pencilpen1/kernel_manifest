@@ -3,9 +3,6 @@ name: 构建SM8475-11r内核
 on:
   workflow_dispatch:
 
-  schedule:
-      - cron: '0 4 * * 1'
-
 jobs:
   
   build:
@@ -87,7 +84,7 @@ jobs:
        cd ./AnyKernel3/
        ./ksu.sh
        cd ..
-       cp kernel/out/dist/Image ./AnyKernel3/
+       cp kernel/kernel_platform/out/msm-kernel-waipio-gki/gki_kernel/dist/Image ./AnyKernel3/
        
     - name: 上传 AnyKernel3
       uses: actions/upload-artifact@v4
@@ -99,4 +96,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: Image-KernelSU_Next-SUSFS
-        path: kernel/out/dist/Image
+        path: kernel/kernel_platform/out/msm-kernel-waipio-gki/gki_kernel/dist/Image
