@@ -92,5 +92,5 @@ jobs:
     - name: 上传 Image
       uses: actions/upload-artifact@v4
       with:
-        name: Image-KernelSU_Next-SUSFS
+        name: Image-KernelSU_Next-SUSFS-Ace2Pro
         path: kernel/kernel_platform/out/msm-kernel-kalama-gki/gki_kernel/dist/Image
