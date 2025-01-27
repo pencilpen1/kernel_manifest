@@ -39,7 +39,7 @@ jobs:
         mkdir kernel && cd kernel
         repo init -u https://github.com/OnePlusOSS/kernel_manifest.git -b oneplus/sm8475 -m oneplus_11r_v.xml --depth=1
         repo sync -j$(nproc --all)
-        sed -i '203a\export LTO=thin' kernel_platform/oplus/build/oplus_setup.sh
+        # sed -i '203a\export LTO=thin' kernel_platform/oplus/build/oplus_setup.sh
         sed -i 's/export REPACK_IMG=true/export REPACK_IMG=false/Ig' kernel_platform/oplus/build/oplus_setup.sh
         
         # sed -i 's/local default_value=none/local default_value=thin/Ig' kernel_platform/oplus/build/oplus_setup.sh
@@ -76,6 +76,7 @@ jobs:
     - name: 编译内核
       run: |
         cd kernel
+        export LTO=thin
         ./kernel_platform/oplus/build/oplus_build_kernel.sh waipio gki
 
     - name: 打包 AnyKernel3
