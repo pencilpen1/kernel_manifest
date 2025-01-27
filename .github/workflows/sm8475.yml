@@ -3,6 +3,8 @@ name: 构建SM8475内核
 on:
   workflow_dispatch:
 
+  schedule:
+      - cron: '0 4 * * 1'
 
 jobs:
   
