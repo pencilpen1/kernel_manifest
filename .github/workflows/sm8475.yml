@@ -78,8 +78,12 @@ jobs:
 
     - name: 打包 AnyKernel3
       run: |
-       git clone https://github.com/Kernel-SU/AnyKernel3 --depth=1
+       git clone https://github.com/Yxiguan/AnyKernel3.git --depth=1
        rm -rf ./AnyKernel3/.git
+       sudo chmod 777 ./AnyKernel3/ksu.sh
+       cd ./AnyKernel3/
+       ./ksu.sh
+       cd ..
        cp kernel/out/dist/Image ./AnyKernel3/
        
     - name: 上传 AnyKernel3
