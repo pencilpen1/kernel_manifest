@@ -1,6 +1,7 @@
 name: 构建SM8550-12r内核
 
 on:
+  workflow_call:
   workflow_dispatch:
 
 jobs:
