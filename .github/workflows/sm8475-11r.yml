@@ -75,7 +75,6 @@ jobs:
         cd kernel
         export LTO=thin
         ./kernel_platform/oplus/build/oplus_build_kernel.sh waipio gki
-        cat kernel_platform/out/msm-waipio-waipio-gki/gki_kernel/common/include/config/kernel.release
 
     - name: 打包 AnyKernel3
       run: |
