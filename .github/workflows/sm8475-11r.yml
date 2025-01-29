@@ -40,7 +40,7 @@ jobs:
         sed -i 's/export REPACK_IMG=true/export REPACK_IMG=false/Ig' kernel_platform/oplus/build/oplus_setup.sh
         sed -i 's/ -dirty$//' kernel_platform/common/scripts/setlocalversion
         sed -i '1i CONFIG_LOCALVERSION="-XiGuan"' kernel_platform/common/arch/arm64/configs/gki_defconfig
-        sed -i 's/BUILD_VENDOR_DLKM=1/BUILD_VENDOR_DLKM=0/; s/BUILD_INIT_BOOT_IMG=1/BUILD_INIT_BOOT_IMG=0/' kernel_platform/msm-kernel/build.config.msm.pineapple
+        sed -i 's/BUILD_VENDOR_DLKM=1/BUILD_VENDOR_DLKM=0/; s/BUILD_INIT_BOOT_IMG=1/BUILD_INIT_BOOT_IMG=0/' kernel_platform/msm-kernel/build.config.msm.waipio
         sed -i 's/BUILD_SYSTEM_DLKM=1/BUILD_SYSTEM_DLKM=0/' kernel_platform/common/build.config.gki.aarch64
         
     - name: 添加KernelSU Next
