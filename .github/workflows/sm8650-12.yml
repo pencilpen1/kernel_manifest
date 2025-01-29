@@ -28,10 +28,16 @@ jobs:
          git config --global user.name "Yxiguan"
          git config --global user.email "2501608779@qq.com"
     
+    - name: 安装repo
+      run: |
+        curl https://storage.googleapis.com/git-repo-downloads/repo > ~/repo
+        chmod a+x ~/repo
+        sudo mv ~/repo /usr/local/bin/repo
+    
     - name: 安装编译环境
       run: |
         sudo apt update && sudo apt upgrade -y
-        sudo apt install ccache wget curl git repo python3 python-is-python3 -y
+        sudo apt install curl git python3 -y
 
     - name: 拉取oneplus 12内核清单
       run: |
@@ -43,8 +49,8 @@ jobs:
         sed -i 's/ -dirty$//' kernel_platform/msm-kernel/scripts/setlocalversion
         sed -i '1a CONFIG_LOCALVERSION="-XiGuan"' kernel_platform/common/arch/arm64/configs/gki_defconfig
         sed -i '1a CONFIG_LOCALVERSION="-XiGuan"' kernel_platform/msm-kernel/arch/arm64/configs/gki_defconfig
-        sed -i 's/BUILD_VENDOR_DLKM=1/BUILD_VENDOR_DLKM=0/; s/BUILD_INIT_BOOT_IMG=1/BUILD_INIT_BOOT_IMG=0/' kernel_platform/msm-kernel/build.config.msm.pineapple
-        sed -i 's/BUILD_SYSTEM_DLKM=1/BUILD_SYSTEM_DLKM=0/' kernel_platform/common/build.config.gki.aarch64
+        # sed -i 's/BUILD_VENDOR_DLKM=1/BUILD_VENDOR_DLKM=0/; s/BUILD_INIT_BOOT_IMG=1/BUILD_INIT_BOOT_IMG=0/' kernel_platform/msm-kernel/build.config.msm.pineapple
+        # sed -i 's/BUILD_SYSTEM_DLKM=1/BUILD_SYSTEM_DLKM=0/' kernel_platform/common/build.config.gki.aarch64
 
     - name: 添加KernelSU Next
       run: |
