@@ -94,11 +94,11 @@ jobs:
     - name: 上传 AnyKernel3
       uses: actions/upload-artifact@v4
       with:
-        name: AnyKernel3_KernelSU_Next-For-Ace3
+        name: AnyKernel3_KernelSU_Next-For-12
         path: ./AnyKernel3/*
 
     - name: 上传 Image
       uses: actions/upload-artifact@v4
       with:
-        name: Image-KernelSU_Next-SUSFS-Ace3
+        name: Image-KernelSU_Next-SUSFS-12
         path: kernel/kernel_platform/out/msm-kernel-pineapple-gki/dist/Image
