@@ -15,3 +15,5 @@ jobs:
     uses: ./.github/workflows/sm8550-ace2pro.yml
   build_ace3:
     uses: ./.github/workflows/sm8550-ace3.yml
+  build_12:
+    uses: ./.github/workflows/sm8650-12.yml
