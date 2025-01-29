@@ -43,9 +43,12 @@ jobs:
         mkdir kernel && cd kernel
         repo init -u https://github.com/OnePlusOSS/kernel_manifest.git -b oneplus/sm8550 -m oneplus_ace3_v.xml --depth=1
         repo sync -j$(nproc --all)
+        rm kernel_platform/common/android/abi_gki_protected_exports_* || echo "No protected exports!"
+        rm kernel_platform/msm-kernel/android/abi_gki_protected_exports_* || echo "No protected exports!"
         sed -i 's/export REPACK_IMG=true/export REPACK_IMG=false/Ig' kernel_platform/oplus/build/oplus_setup.sh
         sed -i 's/ -dirty$//' kernel_platform/common/scripts/setlocalversion
-        sed -i '1a CONFIG_LOCALVERSION="-XiGuan"' kernel_platform/common/arch/arm64/configs/gki_defconfig
+        sed -i 's/EXTRAVERSION =/EXTRAVERSION =-XiGuan/I' kernel_platform/common/Makefile
+        # sed -i '1a CONFIG_LOCALVERSION="-XiGuan"' kernel_platform/common/arch/arm64/configs/gki_defconfig
         
     - name: 添加KernelSU Next
       run: |
@@ -67,6 +70,10 @@ jobs:
            cd ..
            patch -p1 < 50_add_susfs_in_gki-android13-5.15.patch || true
            cp ../../kernel_patches/69_hide_stuff.patch ./
+           git add -A && git commit -a -m "BUILD Kernel"
+           cd ..
+           cd ./msm-kernel && git add -A && git commit -a -m "BUILD Kernel"
+           cd ..
            patch -p1 -F 3 < 69_hide_stuff.patch
            cp ../../kernel_patches/apk_sign.c_fix.patch ./
            patch -p1 -F 3 < apk_sign.c_fix.patch
@@ -78,8 +85,9 @@ jobs:
     - name: 编译内核
       run: |
         cd kernel
-        export  LTO=thin
+        # export  LTO=thin
         ./kernel_platform/oplus/build/oplus_build_kernel.sh kalama gki
+        cat kernel_platform/out/msm-kernel-kalama-gki/gki_kernel/common/include/config/kernel.release
         
     - name: 打包 AnyKernel3
       run: |
