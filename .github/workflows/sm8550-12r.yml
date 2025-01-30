@@ -108,6 +108,5 @@ jobs:
       run: |
         git clone https://github.com/Yxiguan/Alist_API.git api
         cp ./api/* ./
-        python3 delete.py
         python3 upload.py
         
