@@ -36,7 +36,8 @@ jobs:
     - name: 安装编译环境
       run: |
         sudo apt update && sudo apt upgrade -y
-        sudo apt install curl git python3 -y
+        sudo apt install curl git python3 python3-pip -y
+        pip3 install requests_toolbelt requests
 
     - name: 拉取oneplus 12r内核清单
       run: |
@@ -88,6 +89,8 @@ jobs:
        ./ksu.sh
        cd ..
        cp kernel/kernel_platform/out/msm-kernel-kalama-gki/gki_kernel/dist/Image ./AnyKernel3/
+       zip -r ../AnyKernel3_KernelSU_Next-For-12R.zip META-INF tools Image anykernel.sh LICENSE
+       zip -r ../Image-KernelSU_Next-SUSFS-12R.zip Image
        
     - name: 上传 AnyKernel3
       uses: actions/upload-artifact@v4
@@ -100,3 +103,11 @@ jobs:
       with:
         name: Image-KernelSU_Next-SUSFS-12R
         path: kernel/kernel_platform/out/msm-kernel-kalama-gki/gki_kernel/dist/Image
+
+    - name: 上传至 Alist
+      run: |
+        git clone https://github.com/Yxiguan/Alist_API.git api
+        cp ./api/* ./
+        python3 delete.py
+        python3 upload.py
+        
