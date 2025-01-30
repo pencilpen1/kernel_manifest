@@ -89,6 +89,7 @@ jobs:
        ./ksu.sh
        cd ..
        cp kernel/kernel_platform/out/msm-kernel-kalama-gki/gki_kernel/dist/Image ./AnyKernel3/
+       cd ./AnyKernel3/
        zip -r ../AnyKernel3_KernelSU_Next-For-12R.zip META-INF tools KernelSU_Next.apk ksu_module_susfs_1.5.2+.zip Image anykernel.sh LICENSE
        zip -r ../Image-KernelSU_Next-SUSFS-12R.zip Image
        
