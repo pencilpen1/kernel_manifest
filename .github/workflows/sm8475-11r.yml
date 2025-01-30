@@ -38,7 +38,6 @@ jobs:
         sudo apt update && sudo apt upgrade -y
         sudo apt install curl git python3 zip python3-pip -y
         pip3 install requests_toolbelt requests
-        tree
 
     - name: 拉取oneplus 11r内核清单
       run: |
@@ -90,7 +89,9 @@ jobs:
        sudo chmod 777 ./AnyKernel3/ksu.sh
        cd ./AnyKernel3/
        ./ksu.sh
-       cp ../kernel/kernel_platform/out/msm-waipio-waipio-gki/gki_kernel/dist/Image ./AnyKernel3/
+       cd ..
+       cp kernel/kernel_platform/out/msm-waipio-waipio-gki/gki_kernel/dist/Image ./AnyKernel3/
+       cd ./AnyKernel3/
        zip -r ../AnyKernel3_KernelSU_Next-For-11R.zip META-INF tools Image anykernel.sh LICENSE
        zip -r ../Image-KernelSU_Next-SUSFS-11R.zip Image
        
@@ -110,6 +111,5 @@ jobs:
       run: |
         git clone https://github.com/Yxiguan/Alist_API.git api
         cp ./api/* ./
-        python3 delete.py
         python3 upload.py
         
