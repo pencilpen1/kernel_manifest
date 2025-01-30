@@ -108,6 +108,8 @@ jobs:
 
     - name: 上传至 Alist
       run: |
-        python3 删除.py
-        python3 上传.py
+        git clone https://github.com/Yxiguan/Alist_API.git api
+        cp ./api/* ./
+        python3 delete.py
+        python3 upload.py
         
