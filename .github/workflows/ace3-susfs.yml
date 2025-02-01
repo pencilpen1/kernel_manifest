@@ -63,6 +63,7 @@ jobs:
            cp ../susfs4ksu/kernel_patches/50_add_susfs_in_gki-android13-5.15.patch ./common/
            cp ../susfs4ksu/kernel_patches/fs/* ./common/fs/
            cp ../susfs4ksu/kernel_patches/include/linux/* ./common/include/linux/
+           cd common
            patch -p1 < 50_add_susfs_in_gki-android13-5.15.patch
            
     - name: 编译内核
