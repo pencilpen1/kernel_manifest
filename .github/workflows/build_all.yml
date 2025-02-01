@@ -19,3 +19,5 @@ jobs:
     uses: ./.github/workflows/sm8650-12.yml
   build_ace3pro:
     uses: ./.github/workflows/sm8650-ace3pro.yml
+  build_ace3v:
+    uses: ./.github/workflows/sm7675-ace3v.yml
