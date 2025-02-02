@@ -67,9 +67,18 @@ jobs:
            cp ../susfs4ksu/kernel_patches/50_add_susfs_in_gki-android14-6.1.patch ./common/
            cp ../susfs4ksu/kernel_patches/fs/* ./common/fs/
            cp ../susfs4ksu/kernel_patches/include/linux/* ./common/include/linux/
-           cd ./common/
-           patch -p1 < 50_add_susfs_in_gki-android14-6.1.patch
-
+           cd ./common/KernelSU-Next
+           patch -p1 --forward < 10_enable_susfs_for_ksu.patch || true
+           cd ..
+           patch -p1 < 50_add_susfs_in_gki-android14-6.1.patch || true
+           cp ../../kernel_patches/69_hide_stuff.patch ./
+           patch -p1 -F 3 < 69_hide_stuff.patch
+           cp ../../kernel_patches/apk_sign.c_fix.patch ./
+           patch -p1 -F 3 < apk_sign.c_fix.patch
+           cp ../../kernel_patches/core_hook.c_fix.patch ./
+           patch -p1 --fuzz=3 < ./core_hook.c_fix.patch
+           cp ../../kernel_patches/selinux.c_fix.patch ./
+           patch -p1 -F 3 < selinux.c_fix.patch
            
     - name: 编译内核
       run: |
@@ -78,6 +87,7 @@ jobs:
         ./kernel_platform/oplus/build/oplus_build_kernel.sh pineapple gki
         
     - name: 打包 AnyKernel3
+      if: always()
       run: |
        git clone https://github.com/Yxiguan/AnyKernel3.git --depth=1
        rm -rf ./AnyKernel3/.git
