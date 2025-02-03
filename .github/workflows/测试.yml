@@ -62,6 +62,7 @@ jobs:
         KSU_VERSION=$(expr $(/usr/bin/git rev-list --count HEAD) "+" 10200)
         # echo "KSUVER=$KSU_VERSION" >> $GITHUB_ENV
         sed -i "s/DKSU_VERSION=16/DKSU_VERSION=${KSU_VERSION}/" kernel/Makefile
+        sed -i '30a $(info -- KernelSU-Next version: $(KSU_VERSION))' kernel/Makefile
         
     - name: 添加SUSFS
       run: |
@@ -80,7 +81,7 @@ jobs:
     - name: 编译内核
       run: |
         cd kernel
-        export  LTO=thin
+        # export  LTO=thin
         ./kernel_platform/oplus/build/oplus_build_kernel.sh pineapple gki
         
     - name: 打包 AnyKernel3
