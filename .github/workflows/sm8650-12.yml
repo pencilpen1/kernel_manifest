@@ -62,6 +62,7 @@ jobs:
         echo "KSUVER=$KSU_VERSION" >> $GITHUB_ENV
         sed -i "s/DKSU_VERSION=16/DKSU_VERSION=${KSU_VERSION}/" kernel/MakefileD) "+" 10200)
         sed -i "s/DKSU_VERSION=16/DKSU_VERSION=$(KSU_VERSION)/" kernel/Makefile
+        sed -i '29i $(info -- KernelSU-Next version: $(KSU_VERSION))' kernel/Makefile
         
     - name: 添加SUSFS
       run: |
