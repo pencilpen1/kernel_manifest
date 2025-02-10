@@ -1,4 +1,4 @@
-name: 构建SM8650-12内核
+name: 构建SM8650 KSU内核（op12）
 
 on:
   workflow_call:
