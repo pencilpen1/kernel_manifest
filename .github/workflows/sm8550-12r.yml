@@ -68,5 +68,5 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: Image
-        path: kernel/kernel_platform/out/msm-kernel-pineapple-gki/dist/Image
+        path: kernel/kernel_platform/out/msm-kernel-kalama-gki/dist/Image
         
