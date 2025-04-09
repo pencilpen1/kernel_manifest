@@ -24,8 +24,8 @@ jobs:
 
     - name: Configure Git
       run: |
-         git config --global user.name "Yxiguan"
-         git config --global user.email "2501608779@qq.com"
+         git config --global user.name "pencilpen1"
+         git config --global user.email "q2671273244@163.com"
     
     - name: 安装repo
       run: |
