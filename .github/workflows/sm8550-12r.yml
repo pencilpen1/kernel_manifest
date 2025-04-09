@@ -45,27 +45,14 @@ jobs:
         repo init -u https://github.com/OnePlusOSS/kernel_manifest.git -b oneplus/sm8550 -m oneplus_12r_v.xml --depth=1
         repo sync -j$(nproc --all)
         sed -i 's/export REPACK_IMG=true/export REPACK_IMG=false/Ig' kernel_platform/oplus/build/oplus_setup.sh
-        sed -i 's/EXTRAVERSION =/EXTRAVERSION =-XiGuan/I' kernel_platform/common/Makefile
+        sed -i 's/EXTRAVERSION =/EXTRAVERSION =-Pencil/I' kernel_platform/common/Makefile
         sed -i 's/ -dirty$//' kernel_platform/common/scripts/setlocalversion
         
         
     - name: 添加KernelSU Next
       run: |
         cd kernel/kernel_platform/common
-        curl -LSs "https://raw.githubusercontent.com/rifsxd/KernelSU-Next/next/kernel/setup.sh" | bash -s next-next
-        
-    - name: 添加SUSFS
-      run: |
-           cd kernel
-           git clone https://gitlab.com/simonpunk/susfs4ksu.git -b gki-android13-5.15
-           # git clone https://github.com/TheWildJames/kernel_patches.git
-           cd kernel_platform
-           cp ../susfs4ksu/kernel_patches/KernelSU/10_enable_susfs_for_ksu.patch ./common/KernelSU-Next/
-           cp ../susfs4ksu/kernel_patches/50_add_susfs_in_gki-android13-5.15.patch ./common/
-           cp ../susfs4ksu/kernel_patches/fs/* ./common/fs/
-           cp ../susfs4ksu/kernel_patches/include/linux/* ./common/include/linux/
-           cd common
-           patch -p1 < 50_add_susfs_in_gki-android13-5.15.patch
+        curl -LSs "https://raw.githubusercontent.com/ShirkNeko/KernelSU/main/kernel/setup.sh" | bash -s susfs-stable
            
     - name: 编译内核
       run: |
@@ -85,22 +72,4 @@ jobs:
        cd ./AnyKernel3/
        zip -r ../AnyKernel3-KernelSU_Next-SUSFS-For-12R.zip META-INF tools KernelSU_Next.apk ksu_module_susfs_1.5.2+.zip Image anykernel.sh LICENSE
        zip -r ../Image-KernelSU_Next-SUSFS-12R.zip Image
-       
-    - name: 上传 AnyKernel3
-      uses: actions/upload-artifact@v4
-      with:
-        name: AnyKernel3-KernelSU_Next-SUSFS-For-12R
-        path: ./AnyKernel3/*
-
-    - name: 上传 Image
-      uses: actions/upload-artifact@v4
-      with:
-        name: Image-KernelSU_Next-SUSFS-12R
-        path: kernel/kernel_platform/out/msm-kernel-kalama-gki/gki_kernel/dist/Image
-
-    - name: 上传至 Alist
-      run: |
-        git clone https://github.com/Yxiguan/Alist_API.git api
-        cp ./api/* ./
-        python3 upload.py
         
