@@ -64,16 +64,9 @@ jobs:
         export LTO=thin
         ./kernel_platform/oplus/build/oplus_build_kernel.sh kalama gki
         
-    - name: 打包 AnyKernel3
-      run: |
-       git clone https://github.com/Yxiguan/AnyKernel3.git --depth=1
-       rm -rf ./AnyKernel3/.git
-       sudo chmod 777 ./AnyKernel3/ksu.sh
-       cd ./AnyKernel3/
-       ./ksu.sh
-       cd ..
-       cp kernel/kernel_platform/out/msm-kernel-kalama-gki/gki_kernel/dist/Image ./AnyKernel3/
-       cd ./AnyKernel3/
-       zip -r ../AnyKernel3-KernelSU_Next-SUSFS-For-12R.zip META-INF tools KernelSU_Next.apk ksu_module_susfs_1.5.2+.zip Image anykernel.sh LICENSE
-       zip -r ../Image-KernelSU_Next-SUSFS-12R.zip Image
+    - name: 上传 Image
+      uses: actions/upload-artifact@v4
+      with:
+        name: Image
+        path: kernel/kernel_platform/out/msm-kernel-pineapple-gki/dist/Image
         
